@@ -2,7 +2,6 @@ from datetime import date, timedelta
 
 def format_week_range(reference_date=None):
     today = reference_date or date.today()
-    print(f"Today: {today}")
 
     # Get the most recent Sunday (week end)
     days_since_sunday = (today.weekday() + 1) % 7
