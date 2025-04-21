@@ -1,0 +1,35 @@
+name: Weekly Notion Automation
+
+on:
+  schedule:
+    - cron: '0 7 * * 0'  # Every Sunday at 07:00 UTC (adjust as needed)
+  workflow_dispatch:     # Allow manual trigger
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run automation script
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          WEEKLY_NOTES_PAGE_ID: ${{ secrets.WEEKLY_NOTES_PAGE_ID }}
+          NOTES_PARENT_PAGE_ID: ${{ secrets.NOTES_PARENT_PAGE_ID }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+        run: |
+          python -m scripts.weekly_notes
